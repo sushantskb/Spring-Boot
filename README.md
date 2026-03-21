@@ -1,69 +1,36 @@
-# 🏥 Hospital Management System (Spring Data JPA)
+# 📘 JPA & Hibernate: Entity Lifecycle & Transactions
 
-A Spring Boot project focused on mastering **Hibernate** and **Spring Data JPA**. This project uses a "Test-Driven" approach to verify database logic and entity relationships before building out the API layer.
+This project serves as a lab for understanding how Spring Data JPA manages entity states and database synchronization.
 
-## 🚀 Features
-* **Entity Mapping:** Clean implementation of `Patient` entities using Jakarta Persistence.
-* **Repository Layer:** Leveraging `JpaRepository` for automated CRUD operations.
-* **Cloud Database:** Fully integrated with **PostgreSQL** hosted on Neon.tech.
-* **Test-First Logic:** Comprehensive database verification using JUnit 5 in the `src/test` directory.
+## (Core Concepts)
+
+### 1. The Persistence Context (1st Level Cache)
+The Persistence Context is like a "short-term memory" for JPA. Within a `@Transactional` method:
+* Every entity fetched is stored in this context.
+* If you ask for the same ID twice, JPA returns the **same object reference**.
+* This reduces unnecessary database hits.
+
+
+
+### 2. Entity Lifecycle States
+| State | Description |
+| :--- | :--- |
+| **Transient** | New object created (`new Patient()`), not yet associated with a session/DB. |
+| **Managed** | Associated with a session. Changes are tracked automatically. |
+| **Detached** | The session/transaction is closed. Changes are no longer tracked. |
+| **Removed** | Scheduled for deletion from the database. |
+
+
+
+### 3. Dirty Checking & @Transactional
+One of Hibernate's most powerful features.
+* **How it works:** At the end of a transaction, Hibernate compares the current state of a **Managed** entity with its original version (the "snapshot").
+* **The Result:** If they differ, Hibernate automatically generates and executes an `UPDATE` statement.
+* **Benefit:** You don't need to manually call `repository.save(entity)` for updates inside a transaction.
+
+## 🧪 Experiments Conducted
+1. **Reference Equality:** Verified that `p1` and `p2` fetching the same ID point to the same memory address.
+2. **Auto-Update:** Verified that changing `p1.setName()` reflected in the database without an explicit save call.
 
 ---
-
-## 📂 Project Structure
-
-```text
-src
-├── main
-│   ├── java
-│   │   └── com.rahulgudu2003.hospitalManagement.Project
-│   │       ├── entity       <-- Patient Database Model
-│   │       ├── repository   <-- Spring Data JPA Interfaces
-│   │       └── ProjectApplication.java
-│   └── resources
-│       └── application.properties <-- Database Configuration
-└── test
-    ├── java
-    │   └── com.rahulgudu2003.hospitalManagement.Project
-    │       └── PatientTests.java  <-- Logic Verification
-```
-
-## 🛠️ Getting Started
-1. Prerequisites
-   Java 17+
-
-Maven
-
-PostgreSQL Driver (included in pom.xml)
-
-2. Database Configuration
-   The application connects to a Neon PostgreSQL instance. Ensure your src/main/resources/application.properties includes the following (replace placeholders with your actual credentials):
-```properties
-spring.datasource.url=jdbc:postgresql://<your-neon-host>/neondb?sslmode=require
-spring.datasource.username=neondb_owner
-spring.datasource.password=********
-spring.jpa.hibernate.ddl-auto=update
-```
-
-3. Running Tests
-   To run the application logic without a Controller/API, use the test suite:
-```bash
-./mvnw test -Dtest=PatientTests
-```
-
-🧪 Learning Progress
-[x] Initialized Spring Boot Project.
-
-[x] Configured PostgreSQL Remote Origin (Neon).
-
-[x] Implemented JPA Entity (Patient).
-
-[x] Created PatientRepository.
-
-[x] Verified Database connectivity via JUnit tests.
-
-[ ] Implement Service Layer.
-
-[ ] Build REST Controllers.
-
-Created by Rahul Gudu
+*Revision Note: Always ensure the transaction boundary is large enough to cover all related database operations.*
