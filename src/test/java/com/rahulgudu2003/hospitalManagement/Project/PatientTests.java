@@ -25,11 +25,31 @@ public class PatientTests {
 
     @Test
     public void testGetPatientById() {
-        // Triggering the Service logic to observe Dirty Checking and the Persistence Context
+        // Triggering the Service logic to observe Dirty Checking and the Persistence
+        // Context
         Patient patient = patientService.getPatientById(1L);
         System.out.println("Returned Patient: " + patient.getName());
 
         // Note: After this line, the Patient is now in 'Detached' state
         // because the transaction in the service has closed.
     }
+
+    @Test
+    public void testGetPatientsByName() {
+        Patient patient = patientRepository.findByName("John Doe");
+        System.out.println("Patient found by name: " + patient);
+    }
+
+    @Test
+    public void testGetPatientsByBirthDateOrEmail() {
+        List<Patient> patients = patientRepository.findByBirthDateOrEmail(LocalDate.of(1990, 1, 1),
+                "john.doe@example.com");
+
+        for (Patient patient : patients) {
+            System.out.println("Patient found: " + patient);
+        }
+
+        System.out.println("Patients found by birth date or email: " + patients);
+    }
+
 }

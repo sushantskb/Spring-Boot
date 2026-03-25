@@ -1,1 +1,3 @@
 SPRING BOOT
+-- More Query Methods --
+https://docs.spring.io/spring-data/jpa/reference/jpa/query-methods.html 
