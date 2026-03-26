@@ -1,11 +1,14 @@
 package com.rahulgudu2003.hospitalManagement.Project;
 
 import com.rahulgudu2003.hospitalManagement.Project.entity.Patient;
+import com.rahulgudu2003.hospitalManagement.Project.entity.type.BloodGroupType;
 import com.rahulgudu2003.hospitalManagement.Project.repository.PatientRepository;
 import com.rahulgudu2003.hospitalManagement.Project.service.PatientService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.time.LocalDate;
 import java.util.List;
 
 @SpringBootTest
@@ -52,4 +55,45 @@ public class PatientTests {
         System.out.println("Patients found by birth date or email: " + patients);
     }
 
+    @Test
+    public void testGetPatientsByBloodGroup() {
+        List<Patient> patients = patientRepository.findByBloodGroup(BloodGroupType.A_POSITIVE);
+
+        for (Patient patient : patients) {
+            System.out.println("Patient found: " + patient);
+        }
+    }
+
+    @Test
+    public void testGetPatientsBornAfterDate() {
+        List<Patient> patients = patientRepository.findByBornAfterDate(LocalDate.of(1978, 1, 1));
+
+        for (Patient patient : patients) {
+            System.out.println("Patient found: " + patient);
+        }
+    }
+
+    @Test
+    public void testCountEachBloodGroupType() {
+        List<Object[]> bloodGroupList = patientRepository.countEachBloodGroupType();
+
+        for (Object[] objects : bloodGroupList) {
+            System.out.println(objects[0] + " " + objects[1]);
+        }
+    }
+
+    @Test 
+    public void testFindAllPatients() {
+        List<Patient> patients = patientRepository.findAllPatients();
+
+        for (Patient patient : patients) {
+            System.out.println("Patient found: " + patient);
+        }
+    }
+
+    @Test
+    public void testUpdateNameWithId() {
+        int rowsUpdated = patientRepository.updateNameWithId("Jane Doe", 1L);
+        System.out.println("Number of rows updated: " + rowsUpdated);
+    }
 }
