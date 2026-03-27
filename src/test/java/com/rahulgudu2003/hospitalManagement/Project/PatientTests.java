@@ -8,6 +8,10 @@ import com.rahulgudu2003.hospitalManagement.Project.service.PatientService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -85,7 +89,7 @@ public class PatientTests {
 
     @Test
     public void testFindAllPatients() {
-        List<Patient> patients = patientRepository.findAllPatients();
+        Page<Patient> patients = patientRepository.findAllPatients(PageRequest.of(1, 2, Sort.by("name")));
 
         for (Patient patient : patients) {
             System.out.println("Patient found: " + patient);
