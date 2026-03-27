@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import com.rahulgudu2003.hospitalManagement.Project.dto.BloodGroupCountResponseEntity;
 import com.rahulgudu2003.hospitalManagement.Project.entity.Patient;
 import com.rahulgudu2003.hospitalManagement.Project.entity.type.BloodGroupType;
 
@@ -27,8 +28,9 @@ public interface PatientRepository extends JpaRepository<Patient, Long> {
     @Query("select p from Patient p where p.birthDate > :birthDate")
     List<Patient> findByBornAfterDate(@Param("birthDate") LocalDate birthDate);
 
-    @Query("SELECT p.bloodGroup, COUNT(p) FROM Patient p GROUP BY p.bloodGroup")
-    List<Object[]> countEachBloodGroupType();
+    @Query("SELECT new com.rahulgudu2003.hospitalManagement.Project.dto.BloodGroupCountResponseEntity(p.bloodGroup, COUNT(p)) FROM Patient p GROUP BY p.bloodGroup")
+    // List<Object[]> countEachBloodGroupType();
+    List<BloodGroupCountResponseEntity> countEachBloodGroupType();
 
     @Query(value = "select * from patient", nativeQuery = true)
     List<Patient> findAllPatients();

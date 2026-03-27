@@ -1,5 +1,6 @@
 package com.rahulgudu2003.hospitalManagement.Project;
 
+import com.rahulgudu2003.hospitalManagement.Project.dto.BloodGroupCountResponseEntity;
 import com.rahulgudu2003.hospitalManagement.Project.entity.Patient;
 import com.rahulgudu2003.hospitalManagement.Project.entity.type.BloodGroupType;
 import com.rahulgudu2003.hospitalManagement.Project.repository.PatientRepository;
@@ -75,14 +76,14 @@ public class PatientTests {
 
     @Test
     public void testCountEachBloodGroupType() {
-        List<Object[]> bloodGroupList = patientRepository.countEachBloodGroupType();
+        List<BloodGroupCountResponseEntity> bloodGroupList = patientRepository.countEachBloodGroupType();
 
-        for (Object[] objects : bloodGroupList) {
-            System.out.println(objects[0] + " " + objects[1]);
+        for (BloodGroupCountResponseEntity bloodGroupCountResponse : bloodGroupList) {
+            System.out.println(bloodGroupCountResponse);
         }
     }
 
-    @Test 
+    @Test
     public void testFindAllPatients() {
         List<Patient> patients = patientRepository.findAllPatients();
 
