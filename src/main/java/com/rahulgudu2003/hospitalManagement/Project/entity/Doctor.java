@@ -25,8 +25,15 @@ public class Doctor {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false, length = 50)
+    private String name;
+
+
     @Column(length = 100)
-    private String specilization;
+    private String specialization;
+
+    @Column(nullable = false, unique = true, length = 100)
+    private String email;
 
     @Column(nullable = false, unique = true, length = 100)
     private String licenseNumber;
